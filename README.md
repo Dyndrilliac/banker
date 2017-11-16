@@ -8,7 +8,7 @@
 
 *******************************************************************
 
-This is a stand-alone Java project for Operating Systems (COP 4610) to provide deadlock detection and prevention using the Banker's algorithm. It uses the *JAMA* package's *Matrix* data structure, which is included with this repository in a Java archive (**.JAR*). See [*JAMA*'s website](http://math.nist.gov/javanumerics/jama/) for more information.
+This is a standalone Java project for Operating Systems (COP 4610) to provide deadlock detection and prevention using the Banker's algorithm. It uses the *JAMA* package's *Matrix* data structure, which is included with this repository in a Java archive (**.JAR*). See [*JAMA*'s website](http://math.nist.gov/javanumerics/jama/) for more information.
 
 **VERY IMPORTANT**: The program's default input routines assume that all data corresponding to matrices or vectors are entered from left-to-right, and from top-to-bottom!
 
