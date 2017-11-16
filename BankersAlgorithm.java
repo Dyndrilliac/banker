@@ -239,7 +239,7 @@ public class BankersAlgorithm
          *    finish[i] = true.
          *    Goto step 2.
          * 
-         * 4. If finish[i] == true for i from 0 to n-1, then the system is in a safe state.
+         * 4. If finish[i] = true for i from 0 to n-1, then the system is in a safe state.
          */
 
         Matrix work = this.getAvailable().copy();
@@ -286,10 +286,10 @@ public class BankersAlgorithm
     public boolean request(final int process, final Matrix request)
     {
         /*
-         * 1. First, check to make sure that the request is less than or equal to need_i.
+         * 1. First, check to make sure that the request <= need_i.
          *    If it is, continue. If not, return failure.
          * 
-         * 2. Next, check to make sure that the request is less than or equal to the available resources.
+         * 2. Next, check to make sure that the request <= available.
          *    If it is, continue. If not, return failure.
          * 
          * 3. Pretend to allocate resources to P_i by modifying the state as follows:
