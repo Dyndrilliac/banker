@@ -5,7 +5,7 @@ import Jama.Matrix;
 
 public class BankersAlgorithm
 {
-    protected static final class RequestData
+    protected static class RequestData
     {
         private int        process;
         private double[][] request;
@@ -19,12 +19,12 @@ public class BankersAlgorithm
 
         public final int getProcess()
         {
-            return process;
+            return this.process;
         }
 
         public final double[][] getRequest()
         {
-            return request;
+            return this.request;
         }
 
         protected final void setProcess(final int process)
@@ -38,7 +38,7 @@ public class BankersAlgorithm
         }
     }
 
-    public static final BankersAlgorithm inputInitialData(final Scanner input) throws InputMismatchException, NoSuchElementException
+    public static BankersAlgorithm inputInitialData(final Scanner input) throws InputMismatchException, NoSuchElementException
     {
         int n = 0, m = 0;
         double[][] available = null, allocation = null, max = null;
@@ -83,7 +83,7 @@ public class BankersAlgorithm
         return new BankersAlgorithm(n, m, new Matrix(available), new Matrix(max), new Matrix(allocation));
     }
 
-    public static final RequestData inputRequestData(final Scanner input, final int m) throws InputMismatchException, NoSuchElementException
+    public static RequestData inputRequestData(final Scanner input, final int m) throws InputMismatchException, NoSuchElementException
     {
         int process = 0;
         double[][] request = null;
@@ -103,7 +103,7 @@ public class BankersAlgorithm
         return new RequestData(process, request);
     }
 
-    public static final void main(final String[] args)
+    public static void main(final String[] args)
     {
         Scanner input = new Scanner(System.in);
 
@@ -223,7 +223,7 @@ public class BankersAlgorithm
         return this.getMax().minus(this.getAllocation());
     }
 
-    public final boolean isSafe()
+    public boolean isSafe()
     {
         /*
          * 1. Let work and finish be vectors of length m and n, respectively.
@@ -279,15 +279,11 @@ public class BankersAlgorithm
         {
             retVal = true;
         }
-        else
-        {
-            retVal = false;
-        }
 
         return retVal;
     }
 
-    public final boolean request(final int process, final Matrix request)
+    public boolean request(final int process, final Matrix request)
     {
         /*
          * 1. First, check to make sure that the request is less than or equal to need_i.
