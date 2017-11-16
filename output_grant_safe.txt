@@ -1,0 +1,106 @@
+Please enter the number of processes.
+5
+
+Please enter the number of resource types.
+3
+
+Please enter the available vector.
+3
+3
+2
+
+Please enter the max matrix.
+7
+5
+3
+3
+2
+2
+9
+0
+2
+2
+2
+2
+4
+3
+3
+
+Please enter the allocation matrix.
+0
+1
+0
+2
+0
+0
+3
+0
+2
+2
+1
+1
+0
+0
+2
+
+Allocated process: 1
+Available resources: 
+
+   5   3   2
+
+Allocated process: 3
+Available resources: 
+
+   7   4   3
+
+Allocated process: 4
+Available resources: 
+
+   7   4   5
+
+Allocated process: 0
+Available resources: 
+
+   7   5   5
+
+Allocated process: 2
+Available resources: 
+
+  10   5   7
+
+Safe State!
+
+Which process is requesting increased resources?
+0
+
+Please enter the request vector.
+0
+2
+0
+
+Allocated process: 3
+Available resources: 
+
+   5   2   3
+
+Allocated process: 1
+Available resources: 
+
+   7   2   3
+
+Allocated process: 2
+Available resources: 
+
+  10   2   5
+
+Allocated process: 0
+Available resources: 
+
+  10   5   5
+
+Allocated process: 4
+Available resources: 
+
+  10   5   7
+
+Request granted: Safe State!
