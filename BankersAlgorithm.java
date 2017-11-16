@@ -283,7 +283,7 @@ public class BankersAlgorithm
         return retVal;
     }
 
-    public boolean request(final int process, final Matrix request)
+    public boolean request(final int i, final Matrix request)
     {
         /*
          * 1. First, check to make sure that the request <= need_i.
@@ -303,7 +303,7 @@ public class BankersAlgorithm
 
         boolean retVal = false;
 
-        if ( this.check(process, 0, this.getNeed(), request) )
+        if ( this.check(i, 0, this.getNeed(), request) )
         {
             if ( this.check(0, 0, this.getAvailable(), request) )
             {
@@ -314,8 +314,8 @@ public class BankersAlgorithm
 
                 for ( int j = 0; j < this.getM(); j++ )
                 {
-                    temp.getAllocation().getArray()[process][j] += request.getArray()[0][j];
-                    temp.getNeed().getArray()[process][j] -= request.getArray()[0][j];
+                    temp.getAllocation().getArray()[i][j] += request.getArray()[0][j];
+                    temp.getNeed().getArray()[i][j] -= request.getArray()[0][j];
                 }
 
                 // Safety check.
@@ -327,6 +327,14 @@ public class BankersAlgorithm
                     this.setAllocation(temp.getAllocation());
                 }
             }
+            else
+            {
+                System.out.println("*ERROR*: P" + i + " exceeded its maximum claim!");
+            }
+        }
+        else
+        {
+            System.out.println("*ERROR*: P" + i + " exceeded its maximum claim!");
         }
 
         return retVal;
