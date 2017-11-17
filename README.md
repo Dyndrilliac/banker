@@ -33,13 +33,9 @@ Support:
 
 # Compilation
 
-**NOTE**: The default included makefile assumes a Unix-like environment. In order to compile on Windows, you need to adjust the classpath parameter to be semi-colon delimited (as opposed to colon delimited in Unix-like environments). See the included *makefile.windows* if you don't know what I'm talking about.
-
 * make
 
 # Execution
-
-**NOTE**: The included makefile assumes a Unix-like environment. In order to execute on Windows, you need to adjust the classpath parameter to be semi-colon delimited (as opposed to colon delimited in Unix-like environments). See the included *makefile.windows* if you don't know what I'm talking about.
 
 * make execute
 
