@@ -16,12 +16,12 @@ This is a standalone Java project for Operating Systems (COP 4610) to provide de
 
 Samples:
 
-* ***output_deny_unsafe.txt***: Sample input/output for a case denying additional resources because it would result in an unsafe state.
-* ***output_grant_safe.txt***: Sample input/output for a case granting additional resources because it would result in an safe state.
+* ***output_deny_unsafe.txt***: a plain-text file containing sample input/output for a case denying additional resources because it would result in an unsafe state.
+* ***output_grant_safe.txt***: a plain-text file containing sample input/output for a case granting additional resources because it would result in an safe state.
 
 Source Code:
 
-* ***BankersAlgorithm.java***: This is where the magic happens.
+* ***BankersAlgorithm.java***: A java source file containing the BankersAlgorithm class. This is where the magic happens! The class is versatile, reusable, and extendable.
 
 Support:
 
