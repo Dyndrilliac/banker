@@ -27,8 +27,8 @@ Support:
 
 * ***README.md***: this file, the program's documentation.
 * ***LICENSE.md***: please use this software responsibly!
-* ***makefile***: a standard makefile for a Unix-like development environment.
-* ***makefile.windows***: a standard makefile for a Windows development environment. Rename 'makefile' to 'makefile.unix' (or delete it), and then rename 'makefile.windows' to 'makefile'.
+* ***makefile.unix***: a standard makefile for a Unix-like development environment. Rename to '***makefile***' to use.
+* ***makefile.windows***: a standard makefile for a Windows development environment. Rename to '***makefile***' to use.
 * ***JAMA-1.0.3.jar***: This file contains the *JAMA* package (and most notably, the *Matrix* structure) which is developed by the mathematics department of the **National Institute for Standards and Technology** (*NIST*).
 
 # Compilation

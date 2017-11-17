@@ -5,7 +5,7 @@ import Jama.Matrix;
 
 public class BankersAlgorithm
 {
-    protected static class RequestData
+    public static class RequestData
     {
         private int        process;
         private double[][] request;
@@ -161,13 +161,19 @@ public class BankersAlgorithm
      * Note that need[i,j] = max[i,j] – allocation[i,j].
      */
 
-    private Matrix allocation = null;
-    private Matrix available  = null;
-    private int    m          = 0;
-    private Matrix max        = null;
-    private int    n          = 0;
+    private Matrix  allocation = null;
+    private Matrix  available  = null;
+    private int     m          = 0;
+    private Matrix  max        = null;
+    private int     n          = 0;
+    private boolean safe       = false;
 
     public BankersAlgorithm(final int n, final int m, final Matrix available, final Matrix max, final Matrix allocation)
+    {
+        this(n, m, available, max, allocation, false);
+    }
+
+    public BankersAlgorithm(final int n, final int m, final Matrix available, final Matrix max, final Matrix allocation, final boolean silent)
     {
         super();
         this.setN(n);
@@ -175,6 +181,7 @@ public class BankersAlgorithm
         this.setAvailable(available);
         this.setMax(max);
         this.setAllocation(allocation);
+        this.safetyCheck(silent);
     }
 
     protected final boolean check(final int i1, final int i2, final Matrix A, final Matrix B)
@@ -190,7 +197,7 @@ public class BankersAlgorithm
     public final BankersAlgorithm copy()
     {
         // Creates a deep copy of this BankersAlgorithm object.
-        return new BankersAlgorithm(this.getN(), this.getM(), this.getAvailable().copy(), this.getMax().copy(), this.getAllocation().copy());
+        return new BankersAlgorithm(this.getN(), this.getM(), this.getAvailable().copy(), this.getMax().copy(), this.getAllocation().copy(), true);
     }
 
     public final Matrix getAllocation()
@@ -223,64 +230,9 @@ public class BankersAlgorithm
         return this.getMax().minus(this.getAllocation());
     }
 
-    public boolean isSafe()
+    public final boolean isSafe()
     {
-        /*
-         * 1. Let work and finish be vectors of length m and n, respectively.
-         *    work = available.
-         *    finish[i] = false for i from 0 to n-1.
-         * 
-         * 2. Find a value for i such that both of the following conditions are true:
-         *    (a) finish[i] = false.
-         *    (b) need_i <= work.
-         *    If no such i exists, then goto step 4.
-         * 
-         * 3. work = work + allocation_i
-         *    finish[i] = true.
-         *    Goto step 2.
-         * 
-         * 4. If finish[i] = true for i from 0 to n-1, then the system is in a safe state.
-         */
-
-        Matrix work = this.getAvailable().copy();
-        boolean retVal = false, finish[] = new boolean[this.getN()];
-        int k = 0;
-
-        while ( k < this.getN() ) // Loop until all process have been allocated...
-        {
-            boolean allocated = false;
-
-            for ( int i = 0; i < this.getN(); i++ )
-            {
-                // Checking to see if all needed resources for the ith process can be allocated.
-                if ( ( !finish[i] ) && ( this.check(0, i, work, this.getNeed()) ) )
-                {
-                    // Trying to allocate...
-                    for ( int j = 0; j < this.getM(); j++ )
-                    {
-                        work.getArray()[0][j] = work.getArray()[0][j] - this.getNeed().getArray()[i][j] + this.getMax().getArray()[i][j];
-                    }
-
-                    System.out.println("Allocated process: " + i);
-                    System.out.println("Available resources: ");
-                    work.print(2, 0);
-                    allocated = finish[i] = true;
-                    k++;
-                }
-            }
-
-            if ( !allocated ) // If no allocation, then exit the loop.
-            {
-                break;
-            }
-        }
-
-        if ( k == this.getN() ) // If all processes have been successfully allocated, then we have reached a safe state.
-        {
-            retVal = true;
-        }
-
-        return retVal;
+        return this.safe;
     }
 
     public boolean request(final int i, final Matrix request)
@@ -307,18 +259,21 @@ public class BankersAlgorithm
         {
             if ( this.check(0, 0, this.getAvailable(), request) )
             {
-                // Make a temporary deep copy of this BankersAlgorithm object for modifications so the current stable state is not lost in the event of an error.
+                // Make a temporary deep copy of this BankersAlgorithm object.
                 BankersAlgorithm temp = this.copy();
 
+                // Pretend to allocate resources to P_i.
                 temp.getAvailable().minusEquals(request);
 
                 for ( int j = 0; j < this.getM(); j++ )
                 {
                     temp.getAllocation().getArray()[i][j] += request.getArray()[0][j];
-                    temp.getNeed().getArray()[i][j] -= request.getArray()[0][j];
                 }
 
-                // Safety check.
+                // Safety check!
+                temp.safetyCheck(false);
+
+                // If safe, set the return value to true and copy the modified state back into this BankersAlgorithm object.
                 if ( temp.isSafe() )
                 {
                     retVal = true;
@@ -329,15 +284,87 @@ public class BankersAlgorithm
             }
             else
             {
-                System.out.println("*ERROR*: P" + i + " exceeded its maximum claim!");
+                System.out.println("*ERROR*: P" + i + " is exceeding the available resources!");
             }
         }
         else
         {
-            System.out.println("*ERROR*: P" + i + " exceeded its maximum claim!");
+            System.out.println("*ERROR*: P" + i + " is exceeding its maximum claim!");
         }
 
         return retVal;
+    }
+
+    protected void safetyCheck(final boolean silent)
+    {
+        /*
+         * 1. Let work and finish be vectors of length m and n, respectively.
+         *    work = available.
+         *    finish[i] = false for i from 0 to n-1.
+         * 
+         * 2. Find a value for i such that both of the following conditions are true:
+         *    (a) finish[i] = false.
+         *    (b) need_i <= work.
+         *    If no such i exists, then goto step 4.
+         * 
+         * 3. work = work + allocation_i
+         *    finish[i] = true.
+         *    Goto step 2.
+         * 
+         * 4. If finish[i] = true for i from 0 to n-1, then the system is in a safe state.
+         */
+
+        Matrix work = this.getAvailable().copy();
+        boolean finish[] = new boolean[this.getN()];
+        int k = 0;
+
+        if ( !silent )
+        {
+            System.out.println("Calculated need matrix:");
+            this.getNeed().print(2, 0);
+        }
+
+        while ( k < this.getN() ) // Loop until all process have been allocated.
+        {
+            boolean allocated = false;
+
+            for ( int i = 0; i < this.getN(); i++ )
+            {
+                // Checking to see if all needed resources for the ith process can be allocated.
+                if ( ( !finish[i] ) && ( this.check(0, i, work, this.getNeed()) ) )
+                {
+                    // Allocate.
+                    for ( int j = 0; j < this.getM(); j++ )
+                    {
+                        work.getArray()[0][j] = work.getArray()[0][j] + this.getAllocation().getArray()[i][j];
+                    }
+
+                    if ( !silent )
+                    {
+                        System.out.println("Allocated process: P" + i);
+                        System.out.println("Resources available when P" + i + " completes: ");
+                        work.print(2, 0);
+                    }
+
+                    allocated = finish[i] = true;
+                    k++;
+                }
+            }
+
+            if ( !allocated ) // If no allocation, then exit the loop.
+            {
+                break;
+            }
+        }
+
+        if ( k == this.getN() ) // If all processes have been successfully allocated, then we have reached a safe state.
+        {
+            this.setSafe(true);
+        }
+        else
+        {
+            this.setSafe(false);
+        }
     }
 
     protected final void setAllocation(final Matrix allocation)
@@ -363,5 +390,10 @@ public class BankersAlgorithm
     protected final void setN(final int n)
     {
         this.n = n;
+    }
+
+    protected final void setSafe(final boolean safe)
+    {
+        this.safe = safe;
     }
 }
