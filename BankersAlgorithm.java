@@ -1,5 +1,3 @@
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import Jama.Matrix;
 
@@ -38,7 +36,7 @@ public class BankersAlgorithm
         }
     }
 
-    public static BankersAlgorithm inputInitialData(final Scanner input) throws InputMismatchException, NoSuchElementException
+    public static BankersAlgorithm inputInitialData(final Scanner input)
     {
         int n = 0, m = 0;
         double[][] available = null, allocation = null, max = null;
@@ -83,7 +81,7 @@ public class BankersAlgorithm
         return new BankersAlgorithm(n, m, new Matrix(available), new Matrix(max), new Matrix(allocation));
     }
 
-    public static RequestData inputRequestData(final Scanner input, final int m) throws InputMismatchException, NoSuchElementException
+    public static RequestData inputRequestData(final Scanner input, final int m)
     {
         int process = 0;
         double[][] request = null;
@@ -235,7 +233,12 @@ public class BankersAlgorithm
         return this.safe;
     }
 
-    public boolean request(final int i, final Matrix request)
+    public final boolean request(final int i, final Matrix request)
+    {
+        return this.request(i, request, false);
+    }
+
+    public boolean request(final int i, final Matrix request, final boolean silent)
     {
         /*
          * 1. First, check to make sure that the request <= need_i.
@@ -271,7 +274,7 @@ public class BankersAlgorithm
                 }
 
                 // Safety check!
-                temp.safetyCheck(false);
+                temp.safetyCheck(silent);
 
                 // If safe, set the return value to true and copy the modified state back into this BankersAlgorithm object.
                 if ( temp.isSafe() )
