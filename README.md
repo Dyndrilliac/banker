@@ -21,7 +21,7 @@ Samples:
 
 Source Code:
 
-* ***BankersAlgorithm.java***: A java source file containing the BankersAlgorithm class. This is where the magic happens! The class is versatile, reusable, and extendable.
+* ***BankersAlgorithm.java***: A java source file containing the code for the BankersAlgorithm class. This is where the magic happens! The class is versatile, reusable, and extendable.
 
 Support:
 
